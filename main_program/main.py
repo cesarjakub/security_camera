@@ -1,8 +1,8 @@
-#imports here
+#imports 
 import cv2 
 
 
-#code here 
+#code  
 vidoe = cv2.VideoCapture(0)
 while True:
     _, okno = vidoe.read()
