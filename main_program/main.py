@@ -45,18 +45,21 @@ def detect_face(img):
     for(x ,y, w, h) in faces:
         cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), 2)
 
+def getVideo():
+    cap = cv2.VideoCapture(0)
+    while True:
+        _, img = cap.read()       
+        detect_face(img)
+        cv2.imshow("Security_cam", img)    
+        if cv2.waitKey(1) == ord('q'):
+            break
+    cap.release()
+    cv2.destroyAllWindows() 
+
 def main():
     try:
         if myGui():
-            cap = cv2.VideoCapture(0)
-            while True:
-                _, img = cap.read()       
-                detect_face(img)
-                cv2.imshow("Security_cam", img)    
-                if cv2.waitKey(1) == ord('q'):
-                    break
-            cap.release()
-            cv2.destroyAllWindows() 
+            getVideo() 
     except:
         print("Something went wrong")
 
