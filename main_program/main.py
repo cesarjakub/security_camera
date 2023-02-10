@@ -30,11 +30,13 @@ class myGui:
     def check(self):
         username = self.entry.get()
         password = self.entry1.get()
-        if username == "admin" and password == "admin":
-            print(f"{username}, {password}")
-            self.root.destroy()
+        if username == "" and password == "" or username == "" or password == "":
+            messagebox.showerror(title="login error", message="vyplnte pole prosim")
         else:
-            messagebox.showinfo(title="login error", message="heslo nebo jmeno je spatne")
+            if username == "admin" and password == "admin":
+                self.root.destroy()
+            else:
+                messagebox.showerror(title="login error", message="heslo nebo jmeno je spatne")
 
 
 
