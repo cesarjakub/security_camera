@@ -1,10 +1,12 @@
 #imports 
 import cv2 
+import os
+import numpy as np
 import tkinter as tk
 from tkinter import messagebox
 
 #code
-#login window  
+#login window class
 class myGui:
     def __init__(self):
         self.root = tk.Tk()
@@ -42,8 +44,7 @@ class myGui:
 
 
 
-#face detectiona and recognition
-
+#face detectiona and recognition class
 class SecCam:
     def __init__(self):
         self.getVideo()
