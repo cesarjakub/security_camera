@@ -4,8 +4,10 @@
     padding: 0;
     margin: 0;
     font-family: 'Rajdhani', sans-serif;
-    background-color: #1f2021;
     box-sizing: border-box;
+}
+body{
+    background-color: #1f2021;
 }
 
 body::-webkit-scrollbar{
@@ -93,3 +95,38 @@ body::-webkit-scrollbar-track{
     font-size: 2.5vh;
 }
 
+#aboutme-content{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 85vh;
+}
+
+#box{
+    display: flex;
+    flex-wrap: wrap;
+    width: 550px;
+    padding: 15px;
+    margin: auto;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.027);
+    color: white;
+}
+
+#box .img img{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+}
+.column{
+    flex: 50%;
+}
+.me-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.img{
+    display: flex;
+    justify-content: center;
+}
