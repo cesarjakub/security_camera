@@ -3,7 +3,8 @@ import cv2
 import tkinter as tk
 from tkinter import messagebox
 
-#code  
+#code
+#login window  
 class myGui:
     def __init__(self):
         self.root = tk.Tk()
@@ -40,28 +41,41 @@ class myGui:
 
 
 
-def detectFace(img):
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-    for(x ,y, w, h) in faces:
-        cv2.rectangle(img, (x,y), (x+w, y+h), (255,255,0), 2)
 
-def getVideo():
-    cap = cv2.VideoCapture(0)
-    while True:
-        _, img = cap.read()       
-        detectFace(img)
-        cv2.imshow("Security_cam", img)    
-        if cv2.waitKey(1) == ord('q'):
-            break
-    cap.release()
-    cv2.destroyAllWindows() 
+#face detectiona and recognition
+
+class SecCam:
+    def __init__(self):
+        self.getVideo()
+
+    def detectFace(self, img):
+        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+        for(x ,y, w, h) in faces:
+            cv2.rectangle(img, (x,y), (x+w, y+h), (255,255,0), 2)
+
+    def getVideo(self):
+        cap = cv2.VideoCapture(0)
+        while True:
+            _, img = cap.read()       
+            self.detectFace(img)
+            cv2.imshow("Security_cam", img)    
+            if cv2.waitKey(1) == ord('q'):
+                break
+        cap.release()
+        cv2.destroyAllWindows() 
+
+
+
+
 
 def main():
+    login = myGui()
+    securityCameras = SecCam()
     try:
-        if myGui():
-            getVideo() 
+        if login:
+             securityCameras
     except:
         print("Something went wrong")
 
