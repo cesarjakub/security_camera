@@ -4,6 +4,7 @@ import os
 import numpy as np
 import tkinter as tk
 from tkinter import messagebox
+from mySerial import openAndClose
 
 #code
 #login window class
@@ -49,26 +50,56 @@ class SecCam:
     def __init__(self):
         self.getVideo()
 
-    def detectFace(self, img):
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-        for(x ,y, w, h) in faces:
-            cv2.rectangle(img, (x,y), (x+w, y+h), (255,255,0), 2)
+    def load_training_data(self):
+        face_data = []
+        labels = []
+        for i, file_name in enumerate(os.listdir("PSS-security_camera\\main_program\\faces")):
+            img_path = os.path.join("PSS-security_camera\\main_program\\faces", file_name)
+            face_img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+            face_img = cv2.resize(face_img, (100, 100))
+            face_data.append(face_img)
+            labels.append(i)
+        return np.array(face_data), np.array(labels)
 
     def getVideo(self):
+        face_data, labels = self.load_training_data()
+        face_detector = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+        face_recognizer = cv2.face.LBPHFaceRecognizer_create()
+        face_recognizer.train(face_data, labels)
+
+        # inicializace videokamery
         cap = cv2.VideoCapture(0)
+        rozpoznano = False
+
         while True:
-            _, img = cap.read()       
-            self.detectFace(img)
-            cv2.imshow("Security_cam", img)    
-            if cv2.waitKey(1) == ord('q'):
+            _, frame = cap.read()
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+            faces = face_detector.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
+            
+            if len(faces) > 0:
+                for (x, y, w, h) in faces:
+                    face_roi = gray[y:y+h, x:x+w]
+
+                    face_roi = cv2.resize(face_roi, (100, 100))
+                    label, _ = face_recognizer.predict(face_roi)
+
+                    if label == 1:
+                        rozpoznano = True
+                    else:
+                        rozpoznano = False
+            else:
+                rozpoznano = False
+
+            openAndClose(rozpoznano)
+            
+            cv2.imshow('Face detection', frame)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+
         cap.release()
-        cv2.destroyAllWindows() 
-
-
-
+        cv2.destroyAllWindows()
 
 
 def main():
@@ -84,4 +115,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
