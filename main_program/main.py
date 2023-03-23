@@ -14,12 +14,6 @@ class myGui:
         self.root.geometry("300x250")
         self.root.title("Login")
 
-        self.label = tk.Label(self.root, text="Name: ")
-        self.label.pack(padx=20, pady=10)
-
-        self.entry = tk.Entry(self.root)
-        self.entry.pack(padx=40, pady=10)
-
         self.label1 = tk.Label(self.root, text="Password: ")
         self.label1.pack(padx=20, pady=20)
 
@@ -32,12 +26,11 @@ class myGui:
         self.root.mainloop()
 
     def check(self):
-        username = self.entry.get()
         password = self.entry1.get()
-        if username == "" and password == "" or username == "" or password == "":
+        if password == "":
             messagebox.showerror(title="login error", message="vyplnte pole prosim")
         else:
-            if username == "admin" and password == "admin":
+            if password == "admin":
                 self.root.destroy()
             else:
                 messagebox.showerror(title="login error", message="heslo nebo jmeno je spatne")
@@ -53,8 +46,8 @@ class SecCam:
     def load_training_data(self):
         face_data = []
         labels = []
-        for i, file_name in enumerate(os.listdir("PSS-security_camera\\main_program\\faces")):
-            img_path = os.path.join("PSS-security_camera\\main_program\\faces", file_name)
+        for i, file_name in enumerate(os.listdir("main_program\\faces")):
+            img_path = os.path.join("main_program\\faces", file_name)
             face_img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
             face_img = cv2.resize(face_img, (100, 100))
             face_data.append(face_img)
